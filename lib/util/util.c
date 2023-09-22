@@ -30,3 +30,10 @@ char **split(char *command) {
   buf[i] = 0;
   return buf;
 }
+
+void discard_line(FILE *stream) {
+  int c;
+  do {
+    c = fgetc(stream);
+  } while (c != '\n');
+}

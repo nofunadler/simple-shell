@@ -13,13 +13,6 @@
 #define PROMPT "sh$ "
 #define EXIT "exit"
 
-void stream_discard_line(FILE *stream) {
-  int c;
-  do {
-    c = fgetc(stream);
-  } while (c != '\n');
-}
-
 void launch_processes(struct commands *cmd, int *pipes, size_t pipes_count) {
   for (size_t i = 0; i < cmd->count; i++) {
     pid_t pid = fork();
@@ -62,6 +55,7 @@ int main(void) {
       return EXIT_FAILURE;
     }
 
+    // line doesn't fit into buffer. discard the line and 'restart'
     char *endline = strchr(buf, '\n');
     if (!endline) {
       fprintf(stderr, "invalid command: long argument list\n");
@@ -72,6 +66,7 @@ int main(void) {
 
     if (strcmp(buf, EXIT) == 0) break;
 
+    // parse the line (badly)
     struct commands *cmd = sp_parse(buf, (size_t)(endline - buf));
     if (!cmd) {
       fprintf(stderr, "invalid command: parser error\n");
@@ -81,11 +76,12 @@ int main(void) {
     size_t const pipes_count = cmd->count ? cmd->count - 1 : 0;
     int *pipes = pipes_create(pipes_count);  // may return NULL. handled on each usage of pipes
 
-    launch_processes(cmd, pipes, pipes_count);
+    launch_processes(cmd, pipes, pipes_count);  // handle the task
 
     size_t const cmd_count = cmd->count;
-    sp_commands_destroy(cmd);
 
+    // cleanup
+    sp_commands_destroy(cmd);
     pipes_destroy(pipes, pipes_count);
 
     size_t terminated_count = 0;
