@@ -1,8 +1,6 @@
 cmake_minimum_required(VERSION 3.20)
 project(simple_shell VERSION 0.0.1 LANGUAGES C)
 
-message("compiler: ${CMAKE_C_COMPILER_ID}")
-
 if(NOT(CMAKE_C_COMPILER_ID STREQUAL "Clang" OR CMAKE_C_COMPILER_ID STREQUAL "GNU"))
   message(FATAL_ERROR "unsupported target")
 endif()
@@ -32,7 +30,7 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
   target_compile_options(sh
     PRIVATE
     -g
-    -O3
+    -Og
     -fsanitize=address,undefined
   )
 

@@ -37,8 +37,8 @@ static bool cmd_push(struct commands **cmd, char *ptr) {
   return true;
 }
 
-struct commands *sp_parse(char *input, size_t size) {
-  if (!input || !size) return NULL;
+struct commands *sp_parse(char *input, size_t len) {
+  if (!input || !len) return NULL;
 
   struct commands *cmd = cmd_create();
   if (!cmd) return NULL;

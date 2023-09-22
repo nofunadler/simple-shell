@@ -72,7 +72,7 @@ int main(void) {
 
     if (strcmp(buf, EXIT) == 0) break;
 
-    struct commands *cmd = sp_parse(buf, sizeof buf);
+    struct commands *cmd = sp_parse(buf, (size_t)(endline - buf));
     if (!cmd) {
       fprintf(stderr, "invalid command: parser error\n");
       continue;

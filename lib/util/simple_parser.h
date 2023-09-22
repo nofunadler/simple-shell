@@ -12,9 +12,9 @@ struct commands {
  * @brief parses `input` to a `commands`. split the text on a pipe char ('|')
  *
  * @param input
- * @param size the size of input in bytes
+ * @param len the length of input
  * @return struct cmd_vec
  */
-struct commands *sp_parse(char *input, size_t size);
+struct commands *sp_parse(char *input, size_t len);
 
 void sp_commands_destroy(struct commands *commands);
